@@ -15,6 +15,10 @@ class Equity:
 
         res = self.session.get(url, params=params)
         return res.json()
+    
+    def market_status(self):
+        res = self.session.get("https://www.nseindia.com/api/marketStatus")
+        return res.json()
         
     
     
