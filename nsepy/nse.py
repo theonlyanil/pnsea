@@ -26,16 +26,16 @@ class NSE:
         return self.session.get(url).json()
 
     """Endpoint Tester"""
-    def nse_endpoint_tester(self, endpoint_url):
+    def endpoint_tester(self, endpoint_url):
         res = self.session.get(endpoint_url)
-        return res.json()
+        return res
 
 
 if __name__ == "__main__":
     nse = NSE()
 
     """Endpoint Tester"""
-    #print(nse.nse_endpoint_tester("https://www.nseindia.com/api/corporate-event-disclosure?index=Ebddata&from_date=14-11-2024&to_date=14-02-2025"))
+    print(nse.endpoint_tester("https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY").json())
 
     """Autocomplete"""
     #print(nse.autocomplete("Info"))
@@ -76,3 +76,6 @@ if __name__ == "__main__":
     #print(nse.mf.mf_insider_data(from_date="01-01-2024", to_date="01-02-2025"))
     #print(nse.mf.mf_insider_data(isin="INF879O01027"))
     #print(nse.mf.mf_insider_data(symbol="PPFAS Mutual Fund"))
+
+    """Options"""
+    #print(nse.options.fno_stocks_list())
