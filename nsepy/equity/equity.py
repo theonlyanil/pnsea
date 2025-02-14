@@ -1,6 +1,20 @@
 class Equity:
     def __init__(self, session):
         self.session = session
+
+    def info(self, symbol):
+        url = f"https://www.nseindia.com/api/quote-equity?symbol={symbol}"
+        response = self.session.get(url)
+        return response.json()
+    
+    def history(self, symbol, from_date, to_date):
+        url = f"https://www.nseindia.com/api/historical/cm/equity?symbol={symbol}"
+        params = dict()
+        params['from'] = from_date
+        params['to'] = to_date
+
+        res = self.session.get(url, params=params)
+        return res.json()
         
     
     
@@ -75,11 +89,14 @@ class Insider:
     """
     Get Sast Data for a single company
     """
-    def getSastData(self, symbol):
+    def getSastData(self, symbol, from_date=None, to_date=None):
         url = "https://www.nseindia.com/api/corporate-sast-reg29"
         params = dict()
         params["index"] = 'equities'
         params["symbol"] = symbol
+        if from_date and to_date:
+            params["from_date"] = from_date
+            params["to_date"] = to_date
 
         response = self.session.get(url, params=params)
         return response.json()

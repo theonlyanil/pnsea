@@ -11,7 +11,7 @@ from derivatives.options import Options
 class NSE:
     def __init__(self):
         self.session = NSESession()
-        
+
         self.equity = Equity(self.session)
         self.insider = Insider(self.session)
         self.options = Options(self.session)
@@ -21,11 +21,17 @@ class NSE:
 if __name__ == "__main__":
     nse = NSE()
 
+    # Equity Examples
+    """CMP"""
+    print(nse.equity.info("SBIN"))
+
+    """History"""
+    print(nse.equity.history("SBIN", "01-02-2025", "14-02-2025"))
     """
     Insider Data
     """
     #print(nse.insider_data("SBIN"))
-    print(nse.equity.insider_data("INFY", from_date="11-12-2023", to_date="14-02-2025"))
+    #print(nse.equity.insider_data("INFY", from_date="11-12-2023", to_date="14-02-2025"))
 
     """
     Single Company Insider Data
