@@ -7,6 +7,7 @@ Written by Anil Sardiwal
 from nsesession import NSESession
 from equity.equity import Equity, Insider
 from derivatives.options import Options
+from mf.mf import MF
 
 class NSE:
     def __init__(self):
@@ -15,12 +16,16 @@ class NSE:
         self.equity = Equity(self.session)
         self.insider = Insider(self.session)
         self.options = Options(self.session)
+        self.mf = MF(self.session)
 
-    
+    """
+    AutoCompletes the query and returns in JSON format
+    """
     def autocomplete(self, query):
         url = f"https://www.nseindia.com/api/search/autocomplete?q={query}"
         return self.session.get(url).json()
 
+    """Endpoint Tester"""
     def nse_endpoint_tester(self, endpoint_url):
         res = self.session.get(endpoint_url)
         return res.json()
@@ -30,7 +35,7 @@ if __name__ == "__main__":
     nse = NSE()
 
     """Endpoint Tester"""
-    print(nse.nse_endpoint_tester("https://www.nseindia.com/api/equity-stockIndices?index=NIFTY%2050&nometa=true"))
+    #print(nse.nse_endpoint_tester("https://www.nseindia.com/api/corporate-event-disclosure?index=Ebddata&from_date=14-11-2024&to_date=14-02-2025"))
 
     """Autocomplete"""
     #print(nse.autocomplete("Info"))
@@ -66,3 +71,8 @@ if __name__ == "__main__":
     """
     #print(nse.getSastData("SBIN"))
     #print(nse.insider.getSastData("INFY", from_date="01-01-2024", to_date="01-02-2025"))
+
+    """MF Insider Data"""
+    #print(nse.mf.mf_insider_data(from_date="01-01-2024", to_date="01-02-2025"))
+    #print(nse.mf.mf_insider_data(isin="INF879O01027"))
+    #print(nse.mf.mf_insider_data(symbol="PPFAS Mutual Fund"))
