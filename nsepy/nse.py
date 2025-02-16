@@ -3,10 +3,11 @@ NSEPY - NSE Python API
 
 Written by Anil Sardiwal
 """
+import pandas as pd
 
 from nsesession import NSESession
 from equity.equity import Equity, Insider
-from derivatives.options import Options
+from derivatives.options import EquityOptions, CommodityOptions
 from mf.mf import MF
 
 class NSE:
@@ -15,7 +16,8 @@ class NSE:
 
         self.equity = Equity(self.session)
         self.insider = Insider(self.session)
-        self.options = Options(self.session)
+        self.options = EquityOptions(self.session)
+        self.commodity_options = CommodityOptions(self.session)
         self.mf = MF(self.session)
 
     """
@@ -35,7 +37,7 @@ if __name__ == "__main__":
     nse = NSE()
 
     """Endpoint Tester"""
-    print(nse.endpoint_tester("https://www.nseindia.com/api/historical/foCPV?from=01-02-2025&to=15-02-2025&instrumentType=OPTIDX&symbol=NIFTY&year=2025&expiryDate=20-Feb-2025&optionType=CE").json())
+    data = nse.endpoint_tester("https://www.nseindia.com/api/quotes-commodity-derivatives-master").json()
 
 
     """Autocomplete"""

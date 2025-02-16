@@ -47,4 +47,3 @@ if __name__ == "__main__":
     #print(nse.mf.mf_insider_data(symbol="PPFAS Mutual Fund"))
 
     """Options"""
-    #print(nse.options.fno_stocks_list())
