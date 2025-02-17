@@ -22,6 +22,8 @@ if __name__ == "__main__":
     """
     Insider Data
     """
+    #print(nse.insider.insider_data())
+    #print(nse.insider.insider_data(from_date="11-12-2023", to_date="14-02-2025"))
     #print(nse.insider.insider_data("SBIN"))
     #print(nse.insider.insider_data("INFY", from_date="11-12-2023", to_date="14-02-2025"))
 

@@ -32,13 +32,12 @@ class NSE:
         res = self.session.get(endpoint_url)
         return res
 
-
 if __name__ == "__main__":
     nse = NSE()
 
     """Endpoint Tester"""
-    data = nse.endpoint_tester("https://www.nseindia.com/api/quotes-commodity-derivatives-master").json()
-
+    data = nse.endpoint_tester("https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY").json()['data']
+    
 
     """Autocomplete"""
     #print(nse.autocomplete("Info"))

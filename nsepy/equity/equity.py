@@ -1,3 +1,4 @@
+import pandas as pd
 """Equity Module"""
 class Equity:
     def __init__(self, session):
@@ -45,7 +46,7 @@ class Insider:
     symbol: str: Symbol of the company
 
     """
-    def insider_data(self, symbol, from_date=None, to_date=None):
+    def single_co_insider_data(self, symbol, from_date=None, to_date=None):
         url = f"https://www.nseindia.com/api/corporates-pit?index=equities&symbol={symbol}"
         params = dict()
         if from_date:
@@ -58,26 +59,7 @@ class Insider:
         return response.json()
     
     """
-    Get Insider Data for a single company
-    
-    Input: 
-    symbol: str: Symbol of the company
-    
-    """
-    def insider_data(self, symbol, from_date=None, to_date=None):
-        url = f"https://www.nseindia.com/api/corporates-pit?index=equities&symbol={symbol}"
-        params = dict()
-        if from_date:
-            params["from_date"] = from_date
-        if to_date:
-            params["to_date"] = to_date
-
-        response = self.session.get(url, params=params)
-
-        return response.json()
-    
-    """
-    Get Insider Data for a single company
+    Get Insider Data of all companies
 
     Input:
     start_date: str: Start Date in dd-mm-yyyy format
@@ -85,14 +67,16 @@ class Insider:
     symbol: str: Symbol of the company
 
     """
-    def single_co_insider_data(self, start_date, end_date, symbol):
+    def insider_data(self, start_date=None, end_date=None):
         params = dict()
-        params["symbol"] = symbol
-        params["from_date"] = start_date
-        params["to_date"] = end_date
+        if start_date:
+            params["from_date"] = start_date
+        if end_date:
+            params["to_date"] = end_date
         url = 'https://www.nseindia.com/api/corporates-pit?index=equities'
-        response = self.session.get(url, params=params)
-        return response.json()
+        data = self.session.get(url, params=params).json()['data']
+        df = pd.DataFrame(data)
+        return df
     
     """
     Get Pledged Data for a single company
