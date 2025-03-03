@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
   """Endpoint Tester"""
   #print(nse.endpoint_tester("https://www.nseindia.com/api/historical/foCPV?from=01-02-2025&to=15-02-2025&instrumentType=OPTIDX&symbol=NIFTY&year=2025&expiryDate=20-Feb-2025&optionType=CE").json())
-  print(nse.endpoint_tester("https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY").json())
+  #print(nse.endpoint_tester("https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY").json())
 
   """Autocomplete"""
   #print(nse.autocomplete("info"))
@@ -56,4 +56,7 @@ if __name__ == "__main__":
 
   """Options"""
   #print(nse.options.fno_stocks_list()) #FNO Stocks List
-  print(nse.options.option_chain("NIFTY")) #Option Chain
+  #print(nse.options.option_chain_raw("NIFTY")['records']['expiryDates']) #Option Chain - expiry dates
+  #print(nse.options.option_chain_raw("NIFTY")['records']['data']) #Option Chain - all data
+  #print(nse.options.option_chain("NIFTY")) #Option Chain - all data
+  #print(nse.options.chain_by_expiry("NIFTY", "06-Mar-2025")) #Option Chain - filter by expiry
