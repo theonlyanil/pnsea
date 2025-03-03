@@ -1,3 +1,7 @@
+"""
+Just a test usage file. Not to be used in production.
+"""
+
 from nse import NSE
 
 # Flatten the nested dictionaries
