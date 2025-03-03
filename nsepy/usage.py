@@ -1,5 +1,23 @@
 from nse import NSE
 
+# Flatten the nested dictionaries
+def flatten_json(nested_json, prefix=''):
+    flattened = {}
+    for key, value in nested_json.items():
+        new_key = f"{prefix}{key}" if prefix else key
+        if isinstance(value, dict):
+            flattened.update(flatten_json(value, new_key + '_'))
+        elif isinstance(value, list):
+          if len(value)>0 and isinstance(value[0],dict):
+            for i, item in enumerate(value):
+              for k,v in flatten_json(item, new_key+f'_{i}_').items():
+                flattened[k] = v
+          else:
+            flattened[new_key] = value
+        else:
+            flattened[new_key] = value
+    return flattened
+
 if __name__ == "__main__":
     nse = NSE()
 
@@ -11,7 +29,10 @@ if __name__ == "__main__":
 
     # Equity Examples
     """CMP"""
-    #print(nse.equity.info("SBIN"))
+    flattened_data = flatten_json(nse.equity.info("SBIN"))
+    import pandas as pd
+    df = pd.DataFrame([flattened_data])
+    print(df['info_symbol'])
 
     """History"""
     #print(nse.equity.history("SBIN", "01-02-2025", "14-02-2025"))

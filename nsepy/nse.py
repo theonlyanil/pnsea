@@ -6,7 +6,8 @@ Written by Anil Sardiwal
 import pandas as pd
 
 from nsesession import NSESession
-from equity.equity import Equity, Insider
+from equity.equity import Equity
+from equity.insider import Insider
 from derivatives.options import EquityOptions, CommodityOptions
 from mf.mf import MF
 
@@ -36,7 +37,9 @@ if __name__ == "__main__":
     nse = NSE()
 
     """Endpoint Tester"""
-    data = nse.endpoint_tester("https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY").json()['data']
+    data = nse.endpoint_tester("https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY").json()['records']['data']
+    df = (pd.DataFrame(data))
+    df.to_csv("h.csv")
     
 
     """Autocomplete"""
