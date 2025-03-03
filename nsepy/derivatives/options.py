@@ -6,6 +6,10 @@ class EquityOptions:
         url = "https://www.nseindia.com/api/master-quote"
         return self.session.get(url).json()
     
+    def option_chain(self, symbol):
+        url = f"https://www.nseindia.com/api/option-chain-indices?symbol={symbol}"
+        return self.session.get(url).json()
+    
 class CommodityOptions:
     def __init__(self, session):
         self.session = session
