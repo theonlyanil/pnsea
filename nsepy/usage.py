@@ -15,12 +15,13 @@ if __name__ == "__main__":
   #print(nse.autocomplete("info"))
 
   # Equity Examples
-  """CMP"""
-  #print(nse.equity.info("SBIN")['priceInfo']['lastPrice'])
+  """INFO"""
+  #print(nse.equity.info("SBIN")) #Info
+  #print(nse.equity.info("SBIN")['priceInfo']['lastPrice']) # CMP
   #print(nse.equity.info("SBIN")['info']) #Info
 
   """History"""
-  #print(nse.equity.history("SBIN", "01-02-2025", "14-02-2025"))
+  #print(nse.equity.history("ESCORTS", "01-02-2025", "14-02-2025"))
 
   """Market Status"""
   #print(nse.equity.market_status())
@@ -61,7 +62,5 @@ if __name__ == "__main__":
   #print(nse.options.option_chain("NIFTY", strike_price=22000)) #Option Chain - by strike price
   #print(nse.options.option_chain("NIFTY", expiry_date="06-Mar-2025", strike_price=22000)) #Option Chain - by expiry date & strike price
 
-  """Testing Options Pandas"""
-  #data = nse.options.option_chain("NIFTY", expiry_date="06-Mar-2025")
-  #df = pd.DataFrame(data)
-  #print(df)
+  """ Commodity Options """
+  #print(nse.commodity_options.commodity_options_list()) # Not in usage
