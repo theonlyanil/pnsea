@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="pnsea",
-    version="0.1.1",
+    version="0.1.4",
     author="Anil Sardiwal",
     author_email="theonlyanil@gmail.com",
     license_files = ('LICENSE'),
