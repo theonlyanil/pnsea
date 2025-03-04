@@ -1,7 +1,7 @@
-# NSEPY - NSE Python API
+# PYNSE - NSE Python API
 
 ## Overview
-NSEPY is a Python library for fetching data from the National Stock Exchange of India (NSE). It provides easy access to stock market data, options chains, insider trading reports, mutual fund data, and more.
+PYNSE is a Python library for fetching data from the National Stock Exchange of India (NSE). It provides easy access to stock market data, options chains, insider trading reports, mutual fund data, and more.
 
 ## Features
 - Fetch real-time equity data (CMP, historical data, market status, etc.).
@@ -13,14 +13,14 @@ NSEPY is a Python library for fetching data from the National Stock Exchange of 
 
 ## Installation
 ```bash
-pip install nsepy
+pip install pynse
 ```
 
 ## Usage
 
 ### Initialize the NSE Instance
 ```python
-from nse import NSE
+from pynse import NSE
 
 nse = NSE()
 ```

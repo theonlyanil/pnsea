@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name="nsepy",
+    name="pynse",
     version="0.1.0",
     author="Anil Sardiwal",
     author_email="theonlyanil@gmail.com",
