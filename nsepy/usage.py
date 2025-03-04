@@ -46,7 +46,7 @@ if __name__ == "__main__":
   #print(nse.insider.getSastData("INFY", from_date="01-01-2024", to_date="01-02-2025"))
 
   """MF Insider Data"""
-  #print(nse.mf.mf_insider_data(from_date="01-01-2024", to_date="01-02-2025"))
+  #print(nse.mf.mf_insider_data(from_date="01-02-2025", to_date="02-02-2025"))
   #print(nse.mf.mf_insider_data(isin="INF879O01027"))
   #print(nse.mf.mf_insider_data(symbol="PPFAS Mutual Fund"))
 

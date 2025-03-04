@@ -1,3 +1,4 @@
+import pandas as pd
 class MF:
     def __init__(self, session):
         self.session = session
@@ -23,4 +24,6 @@ class MF:
         if symbol:
             url += f"&symbol={symbol}"
 
-        return self.session.get(url).json()
+        data = self.session.get(url).json()
+        df = pd.DataFrame(data)
+        return df
