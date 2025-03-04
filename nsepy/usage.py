@@ -1,7 +1,7 @@
 """
 Just a test usage file. Not to be used in production.
 """
-
+import pandas as pd
 from nse import NSE
 
 if __name__ == "__main__":
@@ -60,3 +60,8 @@ if __name__ == "__main__":
   #print(nse.options.option_chain("NIFTY", expiry_date="06-Mar-2025")) #Option Chain - by expiry date
   #print(nse.options.option_chain("NIFTY", strike_price=22000)) #Option Chain - by strike price
   #print(nse.options.option_chain("NIFTY", expiry_date="06-Mar-2025", strike_price=22000)) #Option Chain - by expiry date & strike price
+
+  """Testing Options Pandas"""
+  #data = nse.options.option_chain("NIFTY", expiry_date="06-Mar-2025")
+  #df = pd.DataFrame(data)
+  #print(df)
