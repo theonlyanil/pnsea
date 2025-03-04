@@ -64,4 +64,5 @@ class Insider:
             params["to_date"] = to_date
 
         response = self.session.get(url, params=params)
-        return response.json()
+        df = pd.DataFrame(response.json()['data'])
+        return df

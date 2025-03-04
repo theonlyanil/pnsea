@@ -37,12 +37,12 @@ if __name__ == "__main__":
   """
   Pledged Data
   """
-  #print(nse.insider.getPledgedData("SBIN"))
+  #print(nse.insider.getPledgedData("ESCORTS"))  # Pledged Data for a single company
 
   """
   Sast Data
   """
-  #print(nse.getSastData("SBIN"))
+  #print(nse.insider.getSastData("ESCORTS"))
   #print(nse.insider.getSastData("INFY", from_date="01-01-2024", to_date="01-02-2025"))
 
   """MF Insider Data"""
