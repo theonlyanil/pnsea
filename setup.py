@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name="pynse",
-    version="0.1.0",
+    name="pnsea",
+    version="0.1.1",
     author="Anil Sardiwal",
     author_email="theonlyanil@gmail.com",
     license_files = ('LICENSE'),
@@ -21,6 +21,7 @@ setup(
     ],
     python_requires='>=3.6',
     install_requires=[
-        "stealthkit==0.1.3",
+        "stealthkit",
+        "pandas",
     ],
 )

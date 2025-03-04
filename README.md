@@ -1,7 +1,7 @@
-# PYNSE - NSE Python API
+# PNSEA - Python NSE API
 
 ## Overview
-PYNSE is a Python library for fetching data from the National Stock Exchange of India (NSE). It provides easy access to stock market data, options chains, insider trading reports, mutual fund data, and more.
+PNSEA is a Python library for fetching data from the National Stock Exchange of India (NSE). It provides easy access to stock market data, options chains, insider trading reports, mutual fund data, and more.
 
 ## Features
 - Fetch real-time equity data (CMP, historical data, market status, etc.).
@@ -13,14 +13,14 @@ PYNSE is a Python library for fetching data from the National Stock Exchange of 
 
 ## Installation
 ```bash
-pip install pynse
+pip install pnsea
 ```
 
 ## Usage
 
 ### Initialize the NSE Instance
 ```python
-from pynse import NSE
+from pnsea import NSE
 
 nse = NSE()
 ```
