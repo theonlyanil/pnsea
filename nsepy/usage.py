@@ -56,7 +56,7 @@ if __name__ == "__main__":
 
   """Options"""
   #print(nse.options.fno_stocks_list()) #FNO Stocks List
-  #print(nse.options.option_chain_raw("NIFTY")['records']['expiryDates']) #Option Chain - expiry dates
-  #print(nse.options.option_chain_raw("NIFTY")['records']['data']) #Option Chain - all data
   #print(nse.options.option_chain("NIFTY")) #Option Chain - all data
-  #print(nse.options.chain_by_expiry("NIFTY", "06-Mar-2025")) #Option Chain - filter by expiry
+  #print(nse.options.option_chain("NIFTY", expiry_date="06-Mar-2025")) #Option Chain - by expiry date
+  #print(nse.options.option_chain("NIFTY", strike_price=22000)) #Option Chain - by strike price
+  #print(nse.options.option_chain("NIFTY", expiry_date="06-Mar-2025", strike_price=22000)) #Option Chain - by expiry date & strike price

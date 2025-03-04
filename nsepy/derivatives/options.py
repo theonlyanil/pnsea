@@ -6,28 +6,30 @@ class EquityOptions:
         url = "https://www.nseindia.com/api/master-quote"
         return self.session.get(url).json()
     
-    def option_chain_raw(self, symbol):
-        url = f"https://www.nseindia.com/api/option-chain-indices?symbol={symbol}"
-        return self.session.get(url).json()
+    def option_chain(self, symbol, expiry_date=None, strike_price=None):
+        """
+        Filters options data for a specific expiry date and/or strike price.
 
-    def option_chain(self, symbol, strike=None):
-        url = f"https://www.nseindia.com/api/option-chain-indices?symbol={symbol}"
-        data = self.session.get(url).json()
-        if strike:
-            return data['records']['data'][strike]
-        return data['records']['data']
+        Args:
+            symbol (str): The symbol of the index.
+            expiry_date (str, optional): The expiry date to filter by. Defaults to None.
+            strike_price (float, optional): The strike price to filter by. Defaults to None.
 
-    def chain_by_expiry(self, symbol, expiry_date):
-        """Filter options data for a specific expiry date."""
+        Returns:
+            list: A list of options data entries that match the filter criteria.
+        """
         url = f"https://www.nseindia.com/api/option-chain-indices?symbol={symbol}"
         data = self.session.get(url).json()['records']['data']
-        return [entry for entry in data if entry.get('expiryDate') == expiry_date]
 
-    def chain_by_strike(self, symbol, strike_price):
-        """Filter options data for a specific strike price."""
-        url = f"https://www.nseindia.com/api/option-chain-indices?symbol={symbol}"
-        data = self.session.get(url).json()['records']['data']
-        return [entry for entry in data if entry.get('strikePrice') == strike_price]
+        filtered_data = data
+
+        if expiry_date:
+            filtered_data = [entry for entry in filtered_data if entry.get('expiryDate') == expiry_date]
+
+        if strike_price is not None:  # Explicitly check for None
+            filtered_data = [entry for entry in filtered_data if entry.get('strikePrice') == strike_price]
+
+        return filtered_data
 
     
 class CommodityOptions:
