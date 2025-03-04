@@ -34,7 +34,8 @@ class EquityOptions:
             list: A list of options data entries that match the filter criteria.
         """
         url = f"https://www.nseindia.com/api/option-chain-indices?symbol={symbol}"
-        data = self.session.get(url).json()['records']['data']
+        records = self.session.get(url).json()['records']
+        data = records['data']
 
         filtered_data = data
 
@@ -60,8 +61,13 @@ class EquityOptions:
         # Drop the original PE and CE columns (optional)
         df_final = df_final.drop(columns=["PE", "CE"])
 
+        # Expiry Dates
+        expiry_dates = records['expiryDates']
+
+        # Underlying Value
+        underlying_value = records['underlyingValue']
         # Return the final DataFrame
-        return df_final
+        return df_final, expiry_dates, underlying_value
 
     
 class CommodityOptions:
