@@ -1,5 +1,3 @@
-import pandas as pd
-
 """Insider Class"""
 class Insider:
     def __init__(self, session):
@@ -41,8 +39,7 @@ class Insider:
             params["to_date"] = end_date
         url = 'https://www.nseindia.com/api/corporates-pit?index=equities'
         data = self.session.get(url, params=params).json()['data']
-        df = pd.DataFrame(data)
-        return df
+        return data
     
     """
     Get Pledged Data for a single company

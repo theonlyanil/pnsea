@@ -1,4 +1,3 @@
-import pandas as pd
 """Equity Module"""
 class Equity:
     def __init__(self, session):
