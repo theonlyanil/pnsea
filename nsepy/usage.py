@@ -29,15 +29,10 @@ if __name__ == "__main__":
   """
   Insider Data
   """
-  #print(nse.insider.insider_data())
-  #print(nse.insider.insider_data(from_date="11-12-2023", to_date="14-02-2025"))
-  #print(nse.insider.insider_data("SBIN"))
-  #print(nse.insider.insider_data("INFY", from_date="11-12-2023", to_date="14-02-2025"))
-
-  """
-  Single Company Insider Data
-  """
-  #print(nse.insider.single_co_insider_data("11-12-2020", "14-02-2025", "SBIN"))
+  #print(nse.insider.insider_data())    #All Insider Data
+  #print(nse.insider.insider_data(from_date="11-12-2023", to_date="14-02-2025"))  #All Insider Data with date range
+  #print(nse.insider.insider_data("SBIN"))  # Insider Data for a single company
+  #print(nse.insider.insider_data("INFY", from_date="11-12-2023", to_date="14-02-2025")) # Insider Data for a single company with date range
 
   """
   Pledged Data
