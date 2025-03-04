@@ -1,60 +1,75 @@
-# nsepy
+# NSEPY - NSE Python API
 
-A Python library for accessing historical data from the National Stock Exchange (NSE) of India.
+## Overview
+NSEPY is a Python library for fetching data from the National Stock Exchange of India (NSE). It provides easy access to stock market data, options chains, insider trading reports, mutual fund data, and more.
 
 ## Features
-
-*   Fetch historical stock prices.
-*   Fetch data for indices.
-*   Simple and easy-to-use interface.
+- Fetch real-time equity data (CMP, historical data, market status, etc.).
+- Get insider trading reports, pledged data, and SAST data.
+- Retrieve option chain data for stocks and indices.
+- Fetch mutual fund insider data.
+- Autocomplete search queries for NSE symbols.
+- Endpoint tester for API debugging.
 
 ## Installation
-
 ```bash
 pip install nsepy
 ```
 
 ## Usage
 
+### Initialize the NSE Instance
 ```python
-import nsepy
-import datetime
-from nsepy import NSE
-from nsepy.utils import flatten_json
-import pandas as pd
+from nse import NSE
 
 nse = NSE()
-
-# Get historical data for a stock
-start = datetime.datetime(2024, 1, 1)
-end = datetime.datetime(2024, 1, 31)
-data = nsepy.get_history(symbol="INFY", start=start, end=end)
-print(data)
-
-# Get historical data for an index
-data = nsepy.get_history(symbol="NIFTY", start=start, end=end, index=True)
-print(data)
-
-# Get Company Info
-flattened_data = flatten_json(nse.equity.info("SBIN"))
-df = pd.DataFrame([flattened_data])
-print(df['info_symbol'])
-
-# Get Market Status
-print(nse.equity.market_status())
-
-# Get Insider Data
-print(nse.insider.insider_data("SBIN"))
-
-# Get Single Company Insider Data
-print(nse.insider.single_co_insider_data("11-12-2020", "14-02-2025", "SBIN"))
-
-# Get Pledged Data
-print(nse.insider.getPledgedData("SBIN"))
-
-# Get Sast Data
-print(nse.insider.getSastData("INFY", from_date="01-01-2024", to_date="01-02-2025"))
-
-# Get MF Insider Data
-print(nse.mf.mf_insider_data(isin="INF879O01027"))
 ```
+
+### Fetch Equity Data
+```python
+# Get current market price of SBIN
+print(nse.equity.info("SBIN")['priceInfo']['lastPrice'])
+
+# Fetch historical data
+print(nse.equity.history("SBIN", "01-02-2025", "14-02-2025"))
+```
+
+### Fetch Insider Trading Data
+```python
+# Get general insider trading data
+print(nse.insider.insider_data())
+
+# Get insider trading data for a specific company
+print(nse.insider.insider_data("SBIN"))
+```
+
+### Fetch Option Chain Data
+```python
+# Get option chain for NIFTY
+print(nse.options.option_chain("NIFTY"))
+
+# Filter option chain by expiry date
+print(nse.options.option_chain("NIFTY", expiry_date="06-Mar-2025"))
+
+# Filter option chain by strike price
+print(nse.options.option_chain("NIFTY", strike_price=22000))
+```
+
+### Fetch Mutual Fund Data
+```python
+# Get mutual fund insider data
+print(nse.mf.mf_insider_data(from_date="01-01-2024", to_date="01-02-2025"))
+```
+
+
+### Autocomplete Search
+```python
+# Search for NSE symbols
+print(nse.autocomplete("Info"))
+```
+
+## Author
+Written by Anil Sardiwal
+
+## License
+MIT License

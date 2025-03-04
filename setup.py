@@ -20,7 +20,6 @@ setup(
     ],
     python_requires='>=3.6',
     install_requires=[
-        "pandas==2.2.3",
         "stealthkit==0.1.3",
     ],
 )
