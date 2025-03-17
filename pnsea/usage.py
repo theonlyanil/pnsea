@@ -58,7 +58,7 @@ if __name__ == "__main__":
   #print(nse.options.option_chain("NIFTY", expiry_date="06-Mar-2025", strike_price=22000)[0]) #Option Chain - by expiry date & strike price
   #print(nse.options.option_chain("NIFTY")[1]) #Option Chain - All Expiries
   #print(nse.options.option_chain("NIFTY")[2]) #Option Chain - Underlying Value
-  print(nse.options.expiry_dates("NIFTY")) #Expiry Dates
+  #print(nse.options.expiry_dates("NIFTY")) #Expiry Dates
 
   """ Commodity Options """
   #print(nse.commodity_options.commodity_options_list()) # Not in usage

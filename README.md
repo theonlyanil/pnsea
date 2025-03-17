@@ -61,6 +61,12 @@ print(nse.insider.getSastData("ESCORTS"))
 print(nse.insider.getSastData("INFY", from_date="01-01-2024", to_date="01-02-2025"))
 ```
 
+### Options Expiry Dates
+```python
+# All expiries from symbol
+print(nse.options.expiry_dates("NIFTY"))
+```
+
 ### Fetch Option Chain Data
 ```python
 # Get option chain for NIFTY - all data
