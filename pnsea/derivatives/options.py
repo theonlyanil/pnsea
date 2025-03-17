@@ -1,4 +1,5 @@
 import pandas as pd
+
 # Define the required fields to extract for both CE and PE
 required_fields = [
     "openInterest",
@@ -20,6 +21,11 @@ class EquityOptions:
         # Returns a list of FNO stocks
         url = "https://www.nseindia.com/api/master-quote"
         return self.session.get(url).json()
+    
+    def expiry_dates(self, symbol):
+        # Returns a list of expiry dates for a given symbol
+        url = f"https://www.nseindia.com/api/option-chain-indices?symbol={symbol}"
+        return self.session.get(url).json()['records']['expiryDates']
     
     def option_chain(self, symbol, expiry_date=None, strike_price=None):
         """
