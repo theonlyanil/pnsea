@@ -50,8 +50,7 @@ if __name__ == "__main__":
   #print(nse.mf.mf_insider_data(isin="INF879O01027"))
   #print(nse.mf.mf_insider_data(symbol="PPFAS Mutual Fund"))
 
-  """Options"""
-  #print(nse.options.fno_stocks_list()) #FNO Stocks List
+  """ Indices Options"""
   #print(nse.options.option_chain("NIFTY")[0]) #Option Chain - all data
   #print(nse.options.option_chain("NIFTY", expiry_date="06-Mar-2025")[0]) #Option Chain - by expiry date
   #print(nse.options.option_chain("NIFTY", strike_price=22000)[0]) #Option Chain - by strike price
@@ -59,6 +58,19 @@ if __name__ == "__main__":
   #print(nse.options.option_chain("NIFTY")[1]) #Option Chain - All Expiries
   #print(nse.options.option_chain("NIFTY")[2]) #Option Chain - Underlying Value
   #print(nse.options.expiry_dates("NIFTY")) #Expiry Dates
+  #option_chain, expiry_dates, underlying_value = nse.options.option_chain("NIFTY")
+  #print(nse.options.get_indices()) #Indices List
+   
+  """ Equity Options """
+  #print(nse.equityOptions.fno_stocks_list()) #FNO Stocks List
+  #print(nse.equityOptions.option_chain("SBIN")[0]) #Option Chain - all data
+  #print(nse.equityOptions.option_chain("SBIN", expiry_date="27-Mar-2025")[0]) #Option Chain - by expiry date
+  #print(nse.equityOptions.option_chain("SBIN", strike_price=800)[0]) #Option Chain - by strike price
+  #print(nse.equityOptions.option_chain("SBIN", expiry_date="27-Mar-2025", strike_price=800)[0]) #Option Chain - by expiry date & strike price
+  #print(nse.equityOptions.option_chain("SBIN")[1]) #Option Chain - All Expiries
+  #print(nse.equityOptions.option_chain("SBIN")[2]) #Option Chain - Underlying Value
+  #print(nse.equityOptions.expiry_dates("SBIN")) #Expiry Dates
+  #option_chain, expiry_dates, underlying_value = nse.equityOptions.option_chain("SBIN")
 
   """ Commodity Options """
   #print(nse.commodity_options.commodity_options_list()) # Not in usage

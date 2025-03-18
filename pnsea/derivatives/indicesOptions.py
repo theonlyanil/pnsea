@@ -1,26 +1,14 @@
 import pandas as pd
+from .utils import extract_option_data
 
-# Define the required fields to extract for both CE and PE
-required_fields = [
-    "openInterest",
-    "changeinOpenInterest",
-    "impliedVolatility",
-    "lastPrice",
-    "totalTradedVolume",
-    "bidQty",
-    "bidprice",
-    "askQty",
-    "askPrice",
-]
-
-class EquityOptions:
+class IndicesOptions:
     def __init__(self, session):
         self.session = session
 
-    def fno_stocks_list(self):
-        # Returns a list of FNO stocks
-        url = "https://www.nseindia.com/api/master-quote"
-        return self.session.get(url).json()
+    def get_indices(self):
+        # Returns a list of indices
+        url = "https://www.nseindia.com/api/quote-derivative?symbol=NIFTY"
+        return self.session.get(url).json()['allSymbol']
     
     def expiry_dates(self, symbol):
         # Returns a list of expiry dates for a given symbol
@@ -74,25 +62,3 @@ class EquityOptions:
         underlying_value = records['underlyingValue']
         # Return the final DataFrame
         return df_final, expiry_dates, underlying_value
-
-    
-class CommodityOptions:
-    def __init__(self, session):
-        self.session = session
-
-    """ CAUTION: Not in use"""
-    def commodity_options_list(self):
-        url = "https://www.nseindia.com/api/quotes-commodity-derivatives-master"
-        #df = pd.DataFrame(self.session.get(url).json())
-        #df.to_csv('h.csv')
-        return self.session.get(url).json()
-    
-# Function to extract required fields from a dictionary column
-def extract_option_data(option_series):
-    extracted_data = []
-    for option_dict in option_series:
-        if isinstance(option_dict, dict):
-            extracted_data.append({key: option_dict.get(key, None) for key in required_fields})
-        else:
-            extracted_data.append({key: None for key in required_fields})
-    return pd.DataFrame(extracted_data)
