@@ -8,7 +8,8 @@ class IndicesOptions:
     def get_indices(self):
         # Returns a list of indices
         url = "https://www.nseindia.com/api/quote-derivative?symbol=NIFTY"
-        return self.session.get(url).json()['allSymbol']
+        data = self.session.get(url).json()['allSymbol']
+        return data
     
     def expiry_dates(self, symbol):
         # Returns a list of expiry dates for a given symbol

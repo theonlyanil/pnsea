@@ -5,13 +5,13 @@ Written by Anil Sardiwal
 """
 import pandas as pd
 
-from .nsesession import NSESession
-from .equity.equity import Equity
-from .equity.insider import Insider
-from .derivatives.indicesOptions import IndicesOptions
-from .derivatives.equityOptions import EquityOptions
-from .derivatives.commodityOptions import CommodityOptions
-from .mf.mf import MF
+from nsesession import NSESession
+from equity.equity import Equity
+from equity.insider import Insider
+from derivatives.indicesOptions import IndicesOptions
+from derivatives.equityOptions import EquityOptions
+from derivatives.commodityOptions import CommodityOptions
+from mf.mf import MF
 
 class NSE:
     def __init__(self):
@@ -23,6 +23,26 @@ class NSE:
         self.equityOptions = EquityOptions(self.session)
         self.commodity_options = CommodityOptions(self.session)
         self.mf = MF(self.session)
+
+    """
+    TODO Fix or Move to NSESession
+    Get NSESession object data
+    """
+    def session_info(self):
+        """
+        Returns a dictionary containing all attributes of the self.session object.
+        """
+        session_data = {}
+        for attr_name in dir(self.session):
+            # Avoid including special methods (starting with __) and attributes that might cause errors
+            if not attr_name.startswith("__") and not callable(getattr(self.session, attr_name)):
+                try:
+                    session_data[attr_name] = getattr(self.session, attr_name)
+                except Exception as e:
+                    print(f"Warning: Could not access attribute '{attr_name}' due to error: {e}")
+                    # Optionally handle the error differently, e.g., log it or skip the attribute
+
+        return session_data
 
     """
     AutoCompletes the query and returns in JSON format

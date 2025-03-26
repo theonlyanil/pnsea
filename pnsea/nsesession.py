@@ -15,3 +15,6 @@ class NSESession(StealthSession):
         super().__init__(*args, **kwargs)
         self.set_headers(custom_headers)
         self.fetch_cookies("https://www.nseindia.com")
+
+    def getHeaders(self):
+        return self.session.headers

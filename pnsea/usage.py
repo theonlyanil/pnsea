@@ -6,6 +6,8 @@ from nse import NSE
 
 if __name__ == "__main__":
   nse = NSE()
+  """Session Data"""
+  #print(nse.session_info())
 
   """Endpoint Tester"""
   #print(nse.endpoint_tester("https://www.nseindia.com/api/historical/foCPV?from=01-02-2025&to=15-02-2025&instrumentType=OPTIDX&symbol=NIFTY&year=2025&expiryDate=20-Feb-2025&optionType=CE").json())
