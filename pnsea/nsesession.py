@@ -14,7 +14,7 @@ class NSESession(StealthSession):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.set_headers(custom_headers)
-        self.fetch_cookies("https://www.nseindia.com")
+        self.fetch_cookies("https://www.nseindia.com/companies-listing/corporate-filings-insider-trading")
 
     def getHeaders(self):
         return self.session.headers

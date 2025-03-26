@@ -5,13 +5,13 @@ Written by Anil Sardiwal
 """
 import pandas as pd
 
-from nsesession import NSESession
-from equity.equity import Equity
-from equity.insider import Insider
-from derivatives.indicesOptions import IndicesOptions
-from derivatives.equityOptions import EquityOptions
-from derivatives.commodityOptions import CommodityOptions
-from mf.mf import MF
+from .nsesession import NSESession
+from .equity.equity import Equity
+from .equity.insider import Insider
+from .derivatives.indicesOptions import IndicesOptions
+from .derivatives.equityOptions import EquityOptions
+from .derivatives.commodityOptions import CommodityOptions
+from .mf.mf import MF
 
 class NSE:
     def __init__(self):
