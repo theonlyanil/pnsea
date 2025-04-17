@@ -45,3 +45,8 @@ class Equity:
     def market_status(self):
         res = self.session.get("https://www.nseindia.com/api/marketStatus")
         return res.json()
+    
+    
+    def all_stock_data(self):
+        res = self.session.get(url = "https://www.nseindia.com/api/live-analysis-stocksTraded")
+        return res.json()
