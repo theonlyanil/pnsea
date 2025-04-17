@@ -23,7 +23,7 @@ if __name__ == "__main__":
   #print(nse.equity.info("SBIN")['info']) #Info
 
   """All Stocks Data"""
-  print(nse.equity.all_stocks_data())
+  #print(nse.equity.all_stocks_data())
   
   """History"""
   #print(nse.equity.history("ESCORTS", "01-02-2025", "14-02-2025"))

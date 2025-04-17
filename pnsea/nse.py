@@ -60,10 +60,12 @@ if __name__ == "__main__":
     nse = NSE()
 
     """Endpoint Tester"""
-    data = nse.endpoint_tester("https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY").json()['records']['data']
-    df = (pd.DataFrame(data))
-    df.to_csv("h.csv")
+    #data = nse.endpoint_tester("https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY").json()['records']['data']
+    #df = (pd.DataFrame(data))
+    #df.to_csv("h.csv")
     
 
     """Autocomplete"""
     #print(nse.autocomplete("Info"))
+
+    print(nse.equity.all_stock_data())
