@@ -67,5 +67,3 @@ if __name__ == "__main__":
 
     """Autocomplete"""
     #print(nse.autocomplete("Info"))
-
-    print(nse.equity.all_stock_data())

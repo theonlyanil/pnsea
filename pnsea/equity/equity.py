@@ -49,4 +49,5 @@ class Equity:
     
     def all_stock_data(self):
         res = self.session.get(url = "https://www.nseindia.com/api/live-analysis-stocksTraded")
-        return res.json()
+        data = res.json()['total']['data']
+        return data
