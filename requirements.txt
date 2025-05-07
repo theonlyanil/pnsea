@@ -1,2 +1,2 @@
-stealthkit==0.1.4
+stealthkit==1.0.0
 pandas
