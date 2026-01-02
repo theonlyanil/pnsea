@@ -1,4 +1,8 @@
+# pnsea/equity/insider.py
+
 import pandas as pd
+from ..constants import NSEEndpoints
+
 """Insider Class"""
 class Insider:
     def __init__(self, session):
@@ -17,7 +21,7 @@ class Insider:
         - dict or list: JSON response containing insider data.
         """
         
-        url = "https://www.nseindia.com/api/corporates-pit?index=equities"
+        url = f"{NSEEndpoints.INSIDER_DATA}?index=equities"
         
         # Append symbol parameter if filtering by a single company
         if symbol:
@@ -47,7 +51,7 @@ class Insider:
     Get Pledged Data for a single company
     """
     def getPledgedData(self, symbol):
-        url = f"https://www.nseindia.com/api/corporate-pledgedata?index=equities&symbol={symbol}"
+        url = f"{NSEEndpoints.PLEDGED_DATA}?index=equities&symbol={symbol}"
         response = self.session.get(url)
         return response.json()
     
@@ -55,7 +59,7 @@ class Insider:
     Get Sast Data for a single company
     """
     def getSastData(self, symbol, from_date=None, to_date=None):
-        url = "https://www.nseindia.com/api/corporate-sast-reg29"
+        url = f"{NSEEndpoints.SAST_DATA}"
         params = dict()
         params["index"] = 'equities'
         params["symbol"] = symbol

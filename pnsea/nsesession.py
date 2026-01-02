@@ -1,3 +1,5 @@
+# pnsea/nsesession.py
+
 from stealthkit import StealthSession
 
 ANY_NSE_URL = "https://www.nseindia.com/market-data/all-upcoming-issues-ipo"

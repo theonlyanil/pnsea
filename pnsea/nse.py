@@ -1,3 +1,4 @@
+# pnsea/nse.py
 """
 NSEPY - NSE Python API
 

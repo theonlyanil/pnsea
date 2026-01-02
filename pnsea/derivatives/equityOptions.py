@@ -1,5 +1,8 @@
+# pnsea/derivatives/equityOptions.py
 import pandas as pd
 from .utils import extract_option_data
+
+from ..constants import NSEEndpoints
 
 class EquityOptions:
     def __init__(self, session):
@@ -7,12 +10,11 @@ class EquityOptions:
 
     def fno_stocks_list(self):
         # Returns a list of FNO stocks
-        url = "https://www.nseindia.com/api/master-quote"
-        return self.session.get(url).json()
+        return self.session.get(NSEEndpoints.EQ_FNO_STOCKS_LIST).json()
     
     def expiry_dates(self, symbol):
         # Returns a list of expiry dates for a given symbol
-        url = f"https://www.nseindia.com/api/option-chain-equities?symbol={symbol}"
+        url = f"{NSEEndpoints.EQ_EXPIRY_DATES}?symbol={symbol}"
         return self.session.get(url).json()['records']['expiryDates']
     
     def option_chain(self, symbol, expiry_date=None, strike_price=None):
@@ -27,7 +29,7 @@ class EquityOptions:
         Returns:
             list: A list of options data entries that match the filter criteria.
         """
-        url = f"https://www.nseindia.com/api/option-chain-equities?symbol={symbol}"
+        url = f"{NSEEndpoints.EQ_OPTION_CHAIN}?symbol={symbol}"
         records = self.session.get(url).json()['records']
         data = records['data']
 

@@ -1,4 +1,8 @@
+# pnsea/equity/equity.py
+
 import pandas as pd
+from ..constants import NSEEndpoints
+
 """Equity Module"""
 class Equity:
     def __init__(self, session):
@@ -8,7 +12,7 @@ class Equity:
     Get Info for a single company
     """
     def info(self, symbol):
-        url = f"https://www.nseindia.com/api/quote-equity?symbol={symbol}"
+        url = f"{NSEEndpoints.EQUITY_QUOTE}?symbol={symbol}"
         response = self.session.get(url)
         #df = pd.DataFrame(response.json())
         #return df
@@ -22,7 +26,7 @@ class Equity:
     to_date: str: End Date in dd-mm-yyyy format
     """
     def history(self, symbol, from_date, to_date):
-        url = f"https://www.nseindia.com/api/historical/cm/equity?symbol={symbol}"
+        url = f"{NSEEndpoints.EQUITY_HISTORY}?symbol={symbol}"
         params = dict()
         params['from'] = from_date
         params['to'] = to_date
@@ -43,11 +47,11 @@ class Equity:
     
     """Get Market Status"""
     def market_status(self):
-        res = self.session.get("https://www.nseindia.com/api/marketStatus")
+        res = self.session.get(url = NSEEndpoints.MARKET_STATUS)
         return res.json()
     
     
     def all_stock_data(self):
-        res = self.session.get(url = "https://www.nseindia.com/api/live-analysis-stocksTraded")
+        res = self.session.get(url = NSEEndpoints.ALL_STOCK_DATA)
         data = res.json()['total']['data']
         return data

@@ -1,17 +1,20 @@
+# pnsea/derivatives/indicesOptions.py
 import pandas as pd
 from .utils import extract_option_data
+
+from ..constants import NSEEndpoints
 
 class IndicesOptions:
     def __init__(self, session):
         self.session = session
 
     def get_indices(self):
-        url = "https://www.nseindia.com/api/quote-derivative?symbol=NIFTY"
+        url = f"{NSEEndpoints.INDICES_OPTIONS_LIST}?symbol=NIFTY"
         data = self.session.get(url).json()['allSymbol']
         return data
     
     def expiry_dates(self, symbol):
-        url = f"https://www.nseindia.com/api/option-chain-contract-info?symbol={symbol}"
+        url = f"{NSEEndpoints.INDICES_EXPIRY_DATES}?symbol={symbol}"
         return self.session.get(url).json()['expiryDates']
     
     def option_chain(self, symbol, expiry_date=None, strike_price=None):
@@ -27,7 +30,7 @@ class IndicesOptions:
             expiry_date = all_dates[0]
 
         # 2. Call the v3 API
-        url = f"https://www.nseindia.com/api/option-chain-v3?type=Indices&symbol={symbol}&expiry={expiry_date}"
+        url = f"{NSEEndpoints.INDICES_OPTION_CHAIN}?type=Indices&symbol={symbol}&expiry={expiry_date}"
         response = self.session.get(url).json()
         
         # 3. Path Extraction - EXACTLY as per your full JSON

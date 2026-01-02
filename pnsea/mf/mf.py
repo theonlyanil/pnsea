@@ -1,4 +1,8 @@
+# pnsea/mf/mf.py
+
 import pandas as pd
+from ..constants import NSEEndpoints
+
 class MF:
     def __init__(self, session):
         self.session = session
@@ -16,7 +20,7 @@ class MF:
     isin: str - ISIN of the Mutual Fund
     """ 
     def mf_insider_data(self, symbol=None, from_date=None, to_date=None, isin=None):
-        url = f"https://www.nseindia.com/api/corporate-event-disclosure?index=Ebddata"
+        url = f"{NSEEndpoints.MF_INSIDER_DATA}?index=Ebddata"
         if from_date and to_date:
             url += f"&from_date={from_date}&to_date={to_date}"
         if isin:
