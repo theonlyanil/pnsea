@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pnsea"
+version = "1.0.0"
+authors = [
+  { name="Anil Sardiwal", email="theonlyanil@gmail.com" },
+]
+description = "A powerful, stealthy unofficial NSE India API wrapper."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+keywords = ["nse", "india", "stock-market", "trading", "options-chain", "finance"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Office/Business :: Financial :: Investment",
+]
+dependencies = [
+    "stealthkit",
+    "pandas",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/theonlyanil/pnsea"
+"Bug Tracker" = "https://github.com/theonlyanil/pnsea/issues"
+
+[tool.setuptools]
+packages = ["pnsea", "pnsea.equity", "pnsea.derivatives", "pnsea.mf"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
