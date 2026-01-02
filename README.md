@@ -1,114 +1,129 @@
-# PNSEA - Python NSE API
+PNSEA - Python NSE API (v1.0.0)
+===============================
 
-## Overview
-PNSEA is a Python library for fetching data from the National Stock Exchange of India (NSE). It provides easy access to stock market data, options chains, insider trading reports, mutual fund data, and more.
+**PNSEA** is a high-performance, stealthy Python library for fetching data from the National Stock Exchange of India (NSE). Powered by **Stealthkit** to bypass rate limits and blocks.
 
-## Features
-- Fetch real-time equity data (CMP, historical data, market status, etc.).
-- Get insider trading reports, pledged data, and SAST data.
-- Retrieve option chain data for stocks and indices.
-- Fetch mutual fund insider data.
-- Autocomplete search queries for NSE symbols.
-- Endpoint tester for API debugging.
+🛠 Usage Reference
+------------------
 
-## Installation
-```bash
-pip install pnsea
+### Initialize
+
+Python
+
 ```
-
-## Usage
-
-### Initialize the NSE Instance
-```python
 from pnsea import NSE
-
 nse = NSE()
+
 ```
 
-### Fetch Equity Data
-```python
-# Get current market price of SBIN
+### 🔍 Discovery & Debugging
+
+Python
+
+```
+# Autocomplete search for symbols
+print(nse.autocomplete("info"))
+
+# Endpoint Tester (Debug any NSE API URL directly through the stealth session)
+url = "https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY"
+print(nse.endpoint_tester(url).json())
+
+```
+
+### 📈 Equity Data
+
+Python
+
+```
+# Get CMP (Current Market Price)
 print(nse.equity.info("SBIN")['priceInfo']['lastPrice'])
 
-# Fetch historical data
+# Get Full Info or specific blocks
+print(nse.equity.info("SBIN"))
+print(nse.equity.info("SBIN")['info'])
+
+# All Stocks Snapshot & Market Status
+print(nse.equity.all_stocks_data())
+print(nse.equity.market_status())
+
+# Historical Data (Returns DataFrame)
 print(nse.equity.history("ESCORTS", "01-02-2025", "14-02-2025"))
 
-# Get market status
-print(nse.equity.market_status())
 ```
 
-### Fetch Insider Trading Data
-```python
-# Get general insider trading data
+### 🏢 Insider Trading & Corporate Actions
+
+Python
+
+```
+# Insider Trading (All or Filtered)
 print(nse.insider.insider_data())
-
-# Get insider trading data with date range
-print(nse.insider.insider_data(from_date="11-12-2023", to_date="14-02-2025"))
-
-# Get insider trading data for a specific company
 print(nse.insider.insider_data("SBIN"))
-
-# Get insider trading data for a specific company with date range
 print(nse.insider.insider_data("INFY", from_date="11-12-2023", to_date="14-02-2025"))
 
-# Get pledged data for a single company
+# Pledged Data
 print(nse.insider.getPledgedData("ESCORTS"))
 
-# Get SAST data for a single company
+# SAST Data
 print(nse.insider.getSastData("ESCORTS"))
-
-# Get SAST data for a single company with date range
 print(nse.insider.getSastData("INFY", from_date="01-01-2024", to_date="01-02-2025"))
+
 ```
 
-### Options Expiry Dates
-```python
-# All expiries from symbol
-print(nse.options.expiry_dates("NIFTY"))
-```
+### 📉 Indices Options (NIFTY, BANKNIFTY, etc.)
 
-### Fetch Option Chain Data
-```python
-# Get option chain for NIFTY - all data
+Python
+
+```
+# Returns: [0] DataFrame, [1] Expiries List, [2] Underlying Value
 print(nse.options.option_chain("NIFTY")[0])
 
-# Get option chain for NIFTY - by expiry date
+# Filtered Calls
 print(nse.options.option_chain("NIFTY", expiry_date="06-Mar-2025")[0])
-
-# Get option chain for NIFTY - by strike price
 print(nse.options.option_chain("NIFTY", strike_price=22000)[0])
 
-# Get option chain for NIFTY - by expiry date & strike price
-print(nse.options.option_chain("NIFTY", expiry_date="06-Mar-2025", strike_price=22000)[0])
+# Helpers
+print(nse.options.expiry_dates("NIFTY"))
+print(nse.options.get_indices())
 
-# Get option chain for NIFTY - All Expiries
-print(nse.options.option_chain("NIFTY")[1])
-
-# Get option chain for NIFTY - Underlying Value
-print(nse.options.option_chain("NIFTY")[2])
 ```
 
-### Fetch Mutual Fund Data
-```python
-#Get mutual fund insider data with date range
+### 🏎 Equity Options (Stock FnO)
+
+Python
+
+```
+# Get list of all FNO Stocks
+print(nse.equityOptions.fno_stocks_list())
+
+# Option Chain for Stocks
+print(nse.equityOptions.option_chain("SBIN")[0])
+print(nse.equityOptions.option_chain("SBIN", expiry_date="27-Mar-2025", strike_price=800)[0])
+
+# Helpers
+print(nse.equityOptions.expiry_dates("SBIN"))
+
+```
+
+### 💰 Mutual Fund Insider Data
+
+Python
+
+```
+# Filter by date, ISIN, or Symbol
 print(nse.mf.mf_insider_data(from_date="01-02-2025", to_date="02-02-2025"))
-
-#Get mutual fund insider data by ISIN
 print(nse.mf.mf_insider_data(isin="INF879O01027"))
-
-#Get mutual fund insider data by symbol
 print(nse.mf.mf_insider_data(symbol="PPFAS Mutual Fund"))
+
 ```
 
+* * * * *
 
-### Autocomplete Search
-```python
-# Search for NSE symbols
-print(nse.autocomplete("Info"))
-```
+🛡 Why PNSEA?
+-------------
 
-## Author
-Written by Anil Sardiwal
+1.  **Human-like Fingerprinting:** Uses `stealthkit` to rotate TLS and headers, preventing `403 Forbidden` errors.
 
-## License
-MIT License
+2.  **Analysis Ready:** Complex nested JSON is automatically flattened into Pandas DataFrames.
+
+3.  **v3 API Support:** Uses the most modern NSE endpoints for speed and reliability.
