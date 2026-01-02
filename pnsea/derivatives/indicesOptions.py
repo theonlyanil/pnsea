@@ -6,60 +6,65 @@ class IndicesOptions:
         self.session = session
 
     def get_indices(self):
-        # Returns a list of indices
         url = "https://www.nseindia.com/api/quote-derivative?symbol=NIFTY"
         data = self.session.get(url).json()['allSymbol']
         return data
     
     def expiry_dates(self, symbol):
-        # Returns a list of expiry dates for a given symbol
-        url = f"https://www.nseindia.com/api/option-chain-indices?symbol={symbol}"
-        return self.session.get(url).json()['records']['expiryDates']
+        url = f"https://www.nseindia.com/api/option-chain-contract-info?symbol={symbol}"
+        return self.session.get(url).json()['expiryDates']
     
     def option_chain(self, symbol, expiry_date=None, strike_price=None):
         """
-        Filters options data for a specific expiry date and/or strike price.
-
-        Args:
-            symbol (str): The symbol of the index.
-            expiry_date (str, optional): The expiry date to filter by. Defaults to None.
-            strike_price (float, optional): The strike price to filter by. Defaults to None.
-
-        Returns:
-            list: A list of options data entries that match the filter criteria.
+        Fetches option chain via v3 API. 
+        Pulls metadata from 'records' and actual strike rows from 'filtered'.
         """
-        url = f"https://www.nseindia.com/api/option-chain-indices?symbol={symbol}"
-        records = self.session.get(url).json()['records']
-        data = records['data']
+        # 1. Handle Default Expiry
+        if not expiry_date:
+            all_dates = self.expiry_dates(symbol)
+            if not all_dates:
+                raise ValueError(f"Could not fetch expiry dates for {symbol}")
+            expiry_date = all_dates[0]
 
-        filtered_data = data
+        # 2. Call the v3 API
+        url = f"https://www.nseindia.com/api/option-chain-v3?type=Indices&symbol={symbol}&expiry={expiry_date}"
+        response = self.session.get(url).json()
+        
+        # 3. Path Extraction - EXACTLY as per your full JSON
+        # Metadata is in 'records'
+        records_meta = response.get('records', {})
+        underlying_value = records_meta.get('underlyingValue', 0)
+        all_expiry_dates = records_meta.get('expiryDates', [])
 
-        if expiry_date:
-            filtered_data = [entry for entry in filtered_data if entry.get('expiryDate') == expiry_date]
+        # Actual strike rows are in 'filtered' -> 'data'
+        filtered_block = response.get('filtered', {})
+        raw_rows = filtered_block.get('data', [])
 
-        if strike_price is not None:  # Explicitly check for None
-            filtered_data = [entry for entry in filtered_data if entry.get('strikePrice') == strike_price]
+        if not raw_rows:
+            return pd.DataFrame(), all_expiry_dates, underlying_value
 
-        df = pd.DataFrame(filtered_data)
+        # 4. Filter by Strike Price if requested
+        # strikePrice IS at the top level of each row in filtered['data']
+        if strike_price is not None:
+            target = float(strike_price)
+            raw_rows = [row for row in raw_rows if float(row.get('strikePrice')) == target]
 
-        # Extract data for both PE and CE
-        pe_df = extract_option_data(df["PE"])
-        ce_df = extract_option_data(df["CE"])
+        df = pd.DataFrame(raw_rows)
 
-        # Rename columns to avoid confusion
-        pe_df.columns = [f"PE_{col}" for col in pe_df.columns]
-        ce_df.columns = [f"CE_{col}" for col in ce_df.columns]
+        # 5. Extract and Flatten CE/PE
+        # We pass the Series of dicts to your extract_option_data utility
+        ce_df = extract_option_data(df["CE"]).add_prefix("CE_")
+        pe_df = extract_option_data(df["PE"]).add_prefix("PE_")
 
-        # Combine with the original DataFrame
-        df_final = pd.concat([df, pe_df, ce_df], axis=1)
+        # 6. Final Concatenation
+        # We keep the top-level strikePrice and join it with the flattened columns
+        df_final = pd.concat([
+            df[['strikePrice']].reset_index(drop=True),
+            ce_df.reset_index(drop=True),
+            pe_df.reset_index(drop=True)
+        ], axis=1)
 
-        # Drop the original PE and CE columns (optional)
-        df_final = df_final.drop(columns=["PE", "CE"])
+        df_final.to_csv("option_chain_debug.csv", index=False)  # Debugging line
 
-        # Expiry Dates
-        expiry_dates = records['expiryDates']
 
-        # Underlying Value
-        underlying_value = records['underlyingValue']
-        # Return the final DataFrame
-        return df_final, expiry_dates, underlying_value
+        return df_final, all_expiry_dates, underlying_value
