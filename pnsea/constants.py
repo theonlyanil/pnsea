@@ -11,9 +11,11 @@ class NSEEndpoints:
     # DERIVATIVES Endpoints
     # Commodity Derivatives Endpoints
     COMMODITY_OPTIONS_LIST: Final = f"{BASE_URL}/api/quotes-commodity-derivatives-master"
+
+    # Equity Derivatives Endpoints
     EQ_FNO_STOCKS_LIST: Final = f"{BASE_URL}/api/master-quote"
-    EQ_EXPIRY_DATES: Final = f"{BASE_URL}/api/option-chain-equities"
-    EQ_OPTION_CHAIN: Final = f"{BASE_URL}/api/option-chain-equities"
+    EQ_EXPIRY_DATES: Final = f"{BASE_URL}/api/option-chain-contract-info"
+    EQ_OPTION_CHAIN: Final = f"{BASE_URL}/api/option-chain-v3"
 
     # Indices Derivatives Endpoints
     INDICES_OPTIONS_LIST: Final = f"{BASE_URL}/api/quote-derivative"

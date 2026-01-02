@@ -1,7 +1,5 @@
-# pnsea/derivatives/equityOptions.py
 import pandas as pd
 from .utils import extract_option_data
-
 from ..constants import NSEEndpoints
 
 class EquityOptions:
@@ -9,58 +7,78 @@ class EquityOptions:
         self.session = session
 
     def fno_stocks_list(self):
-        # Returns a list of FNO stocks
+        """Returns a list of FNO stocks from the master quote endpoint."""
         return self.session.get(NSEEndpoints.EQ_FNO_STOCKS_LIST).json()
-    
+
+    """
+        ENDPOINT_URL_EXAMPLE = https://www.nseindia.com/option-chain-contract-info?symbol=SBIN"
+    """
     def expiry_dates(self, symbol):
-        # Returns a list of expiry dates for a given symbol
-        url = f"{NSEEndpoints.EQ_EXPIRY_DATES}?symbol={symbol}"
-        return self.session.get(url).json()['records']['expiryDates']
+        """Returns a list of available expiry dates for a given equity symbol."""
+        # Using v3 contract info/expiry endpoint
+        params = {"symbol": symbol}
+        response = self.session.get(NSEEndpoints.EQ_EXPIRY_DATES, params=params)
+        return response.json().get('expiryDates', [])
     
+    """
+    Fetches the option chain via v3 API with mandatory expiry handling.
+    
+    Args:
+        symbol (str): The equity symbol (e.g., 'RELIANCE').
+        expiry_date (str, optional): Expiry date (DD-MMM-YYYY). Uses nearest if None.
+        strike_price (float, optional): Specific strike to filter the results.
+        
+    Returns:
+        tuple: (DataFrame of chain, list of all expiry_dates, underlying_value)
+
+    ENDPOINT_URL_EXAMPLE = https://www.nseindia.com/api/option-chain-v3?type=Equity&symbol=RELIANCE&expiry=27-Mar-2025
+    """
     def option_chain(self, symbol, expiry_date=None, strike_price=None):
-        """
-        Filters options data for a specific expiry date and/or strike price.
+        # 1. Handle Mandatory Expiry Logic
+        if not expiry_date:
+            all_dates = self.expiry_dates(symbol)
+            if not all_dates:
+                raise ValueError(f"No expiry dates found for symbol: {symbol}")
+            expiry_date = all_dates[0] 
 
-        Args:
-            symbol (str): The symbol of the index.
-            expiry_date (str, optional): The expiry date to filter by. Defaults to None.
-            strike_price (float, optional): The strike price to filter by. Defaults to None.
+        # 2. Build PARAMS for v3 API
+        params = {"type": "Equity", "symbol": symbol, "expiry": expiry_date}
 
-        Returns:
-            list: A list of options data entries that match the filter criteria.
-        """
-        url = f"{NSEEndpoints.EQ_OPTION_CHAIN}?symbol={symbol}"
-        records = self.session.get(url).json()['records']
-        data = records['data']
+        # 3. Fetch Data
+        response = self.session.get(NSEEndpoints.EQ_OPTION_CHAIN, params=params).json()
+        
+        # 4. Extract Metadata from 'records'
+        records = response.get('records', {})
+        underlying_value = records.get('underlyingValue', 0)
+        all_expiry_dates = records.get('expiryDates', [])
 
-        filtered_data = data
+        # 5. Extract Strike Rows from 'filtered'
+        filtered_block = response.get('filtered', {})
+        raw_rows = filtered_block.get('data', [])
 
-        if expiry_date:
-            filtered_data = [entry for entry in filtered_data if entry.get('expiryDate') == expiry_date]
+        if not raw_rows:
+            return pd.DataFrame(), all_expiry_dates, underlying_value
 
-        if strike_price is not None:  # Explicitly check for None
-            filtered_data = [entry for entry in filtered_data if entry.get('strikePrice') == strike_price]
+        # 6. Filter by Strike Price if requested
+        if strike_price is not None:
+            target = float(strike_price)
+            raw_rows = [row for row in raw_rows if float(row.get('strikePrice')) == target]
 
-        df = pd.DataFrame(filtered_data)
+        df = pd.DataFrame(raw_rows)
 
-        # Extract data for both PE and CE
-        pe_df = extract_option_data(df["PE"])
-        ce_df = extract_option_data(df["CE"])
+        # 7. Extract and Flatten CE/PE
+        # Use .apply(pd.Series) or your utility, but handle missing keys safely
+        ce_df = extract_option_data(df["CE"] if "CE" in df.columns else pd.Series([None]*len(df)))
+        pe_df = extract_option_data(df["PE"] if "PE" in df.columns else pd.Series([None]*len(df)))
+        
+        ce_df = ce_df.add_prefix("CE_")
+        pe_df = pe_df.add_prefix("PE_")
 
-        # Rename columns to avoid confusion
-        pe_df.columns = [f"PE_{col}" for col in pe_df.columns]
-        ce_df.columns = [f"CE_{col}" for col in ce_df.columns]
+        # 8. Final Concatenation
+        df_final = pd.concat([
+            df[['strikePrice']].reset_index(drop=True),
+            ce_df.reset_index(drop=True),
+            pe_df.reset_index(drop=True)
+        ], axis=1)
 
-        # Combine with the original DataFrame
-        df_final = pd.concat([df, pe_df, ce_df], axis=1)
-
-        # Drop the original PE and CE columns (optional)
-        df_final = df_final.drop(columns=["PE", "CE"])
-
-        # Expiry Dates
-        expiry_dates = records['expiryDates']
-
-        # Underlying Value
-        underlying_value = records['underlyingValue']
-        # Return the final DataFrame
-        return df_final, expiry_dates, underlying_value
+        return df_final, all_expiry_dates, underlying_value

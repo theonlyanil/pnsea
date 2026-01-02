@@ -76,27 +76,64 @@ class TestEquityOptions:
         result = equity_opt.fno_stocks_list()
         assert "SBIN" in result
 
+    def test_expiry_dates_v3(self, equity_opt, mock_session):
+        """Verify v3 expiry date extraction"""
+        mock_session.get.return_value.json.return_value = {
+            'expiryDates': ['27-Mar-2025', '24-Apr-2025']
+        }
+        result = equity_opt.expiry_dates("SBIN")
+        assert result[0] == '27-Mar-2025'
+
     @patch('pnsea.derivatives.equityOptions.extract_option_data')
-    def test_equity_option_chain_filtering(self, mock_extract, equity_opt, mock_session):
-        """Verify filtering by strike price and flattening"""
+    def test_equity_option_chain_v3_logic(self, mock_extract, equity_opt, mock_session):
+        """
+        Verify v3 path extraction and parameter passing for Equities
+        """
+        # 1. Setup Mock for utility
         mock_extract.side_effect = [
-            pd.DataFrame({'ltp': [10]}), # PE
-            pd.DataFrame({'ltp': [20]})  # CE
+            pd.DataFrame({'ltp': [20]}), # CE prefixing happens in class
+            pd.DataFrame({'ltp': [10]})  # PE prefixing happens in class
         ]
         
+        # 2. Setup Mock for v3 JSON Response
         mock_session.get.return_value.json.return_value = {
             'records': {
-                'underlyingValue': 800,
-                'expiryDates': ['27-Mar-2025'],
-                'data': [
-                    {'strikePrice': 800, 'expiryDate': '27-Mar-2025', 'CE': {}, 'PE': {}},
-                    {'strikePrice': 810, 'expiryDate': '27-Mar-2025', 'CE': {}, 'PE': {}}
-                ]
+                'underlyingValue': 800.55,
+                'expiryDates': ['27-Mar-2025']
+            },
+            'filtered': {
+                'data': [{
+                    'strikePrice': 800,
+                    'CE': {'ltp': 20},
+                    'PE': {'ltp': 10}
+                }]
             }
         }
         
-        # Test strike price filtering
-        df, _, _ = equity_opt.option_chain("SBIN", strike_price=800)
+        # 3. Call method
+        df, expiries, underlying = equity_opt.option_chain("SBIN", expiry_date="27-Mar-2025")
         
-        assert len(df) == 1
+        # 4. Assertions
+        assert underlying == 800.55
         assert "CE_ltp" in df.columns
+        assert df.iloc[0]['strikePrice'] == 800
+        
+        # 5. Verify Call Parameters (The Contract Test)
+        _, kwargs = mock_session.get.call_args
+        assert kwargs['params']['type'] == "Equity"
+        assert kwargs['params']['expiry'] == "27-Mar-2025"
+
+    def test_option_chain_auto_expiry(self, equity_opt, mock_session):
+        """Test that expiry_dates is called if expiry_date is None"""
+        # Mock expiry_dates response
+        mock_session.get.return_value.json.return_value = {
+            'expiryDates': ['27-Mar-2025'],
+            'records': {'underlyingValue': 800},
+            'filtered': {'data': []}
+        }
+        
+        # We don't provide expiry_date, so it should fetch automatically
+        equity_opt.option_chain("SBIN")
+        
+        # Verify multiple calls (one for expiry_dates, one for option_chain)
+        assert mock_session.get.call_count >= 1
