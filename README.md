@@ -49,6 +49,18 @@ print(nse.equity.market_status())
 # Historical Data (Returns DataFrame)
 print(nse.equity.history("ESCORTS", "01-02-2025", "14-02-2025"))
 
+# --- Institutional Tracking (Price & Delivery) ---
+
+# Fetch historical data including Delivery Quantity & %
+# Returns: DataFrame with 'COP_DELIV_PERC', 'COP_DELIV_QTY', etc.
+df_delivery = nse.equity.delivery_history("RELIANCE", "13-12-2025", "13-01-2026")
+df_delivery = nse.equity.delivery_history("RELIANCE", "13-12-2025", "13-01-2026", type="deliverable", series="ALL")
+df_delivery = nse.equity.delivery_history("RELIANCE", "13-12-2025", "13-01-2026", type="priceVolume", series="EQ")
+
+# Example: Filter for high institutional accumulation (> 60% delivery)
+high_delivery = df_delivery[df_delivery['COP_DELIV_PERC'] > 60]
+print(high_delivery[['mTIMESTAMP', 'CH_CLOSING_PRICE', 'COP_DELIV_PERC']])
+
 ```
 
 ### 🏢 Insider Trading & Corporate Actions

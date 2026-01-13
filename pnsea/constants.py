@@ -23,11 +23,12 @@ class NSEEndpoints:
     INDICES_OPTION_CHAIN: Final = f"{BASE_URL}/api/option-chain-v3"
 
 
-    # EQUITIES Endpoints
+    # EQUITY Endpoints
     EQUITY_QUOTE: Final = f"{BASE_URL}/api/quote-equity"
     EQUITY_HISTORY: Final = f"{BASE_URL}/api/historical/cm/equity"
     MARKET_STATUS: Final = f"{BASE_URL}/api/marketStatus"
     ALL_STOCK_DATA: Final = f"{BASE_URL}/api/live-analysis-stocksTraded"
+    EQ_PRICE_VOL_DEL_HISTORY: Final = f"{BASE_URL}/api/historicalOR/generateSecurityWiseHistoricalData"
 
     # EQUITY CORPORATE Endpoints
     INSIDER_DATA: Final = f"{BASE_URL}/api/corporates-pit"

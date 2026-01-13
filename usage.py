@@ -2,7 +2,7 @@
 Just a test usage file. Not to be used in production.
 """
 import pandas as pd
-from nse import NSE
+from pnsea.nse import NSE
 
 if __name__ == "__main__":
   nse = NSE()
@@ -17,7 +17,7 @@ if __name__ == "__main__":
   #print(nse.autocomplete("info"))
 
   # Equity Examples
-  """INFO"""
+  """Equity INFO"""
   #print(nse.equity.info("SBIN")) #Info
   #print(nse.equity.info("SBIN")['priceInfo']['lastPrice']) # CMP
   #print(nse.equity.info("SBIN")['info']) #Info
@@ -25,8 +25,9 @@ if __name__ == "__main__":
   """All Stocks Data"""
   #print(nse.equity.all_stocks_data())
   
-  """History"""
+  """Equity Historical Data"""
   #print(nse.equity.history("ESCORTS", "01-02-2025", "14-02-2025"))
+  #print(nse.equity.delivery_history("ESCORTS", "01-02-2025", "14-02-2025"))
 
   """Market Status"""
   #print(nse.equity.market_status())

@@ -92,3 +92,17 @@ class TestInsider:
         
         assert isinstance(df, pd.DataFrame)
         assert df.iloc[0]["symbol"] == "SBIN"
+
+    def test_delivery_history_renaming(self, equity, mock_session):
+        mock_json = {"data": [{"mTIMESTAMP": "15-Dec-2025", "CH_OPENING_PRICE": 1551.2, "COP_DELIV_PERC": 67.98}]}
+        mock_session.get.return_value.json.return_value = mock_json
+        
+        df = equity.delivery_history("RELIANCE", "13-12-2025", "13-01-2026")
+        
+        # Assert new column names exist
+        assert "Date" in df.columns
+        assert "Open" in df.columns
+        assert "Delivery_Pct" in df.columns
+        
+        # Assert old names are gone
+        assert "mTIMESTAMP" not in df.columns

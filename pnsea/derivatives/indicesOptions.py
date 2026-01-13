@@ -67,7 +67,7 @@ class IndicesOptions:
             pe_df.reset_index(drop=True)
         ], axis=1)
 
-        df_final.to_csv("option_chain_debug.csv", index=False)  # Debugging line
+        # df_final.to_csv("option_chain_debug.csv", index=False)  # Debugging line
 
 
         return df_final, all_expiry_dates, underlying_value
