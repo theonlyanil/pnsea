@@ -51,15 +51,17 @@ print(nse.equity.history("ESCORTS", "01-02-2025", "14-02-2025"))
 
 # --- Institutional Tracking (Price & Delivery) ---
 
-# Fetch historical data including Delivery Quantity & %
-# Returns: DataFrame with 'COP_DELIV_PERC', 'COP_DELIV_QTY', etc.
+# 1. Default: Fetch Price & Delivery (Most common for accumulation analysis)
 df_delivery = nse.equity.delivery_history("RELIANCE", "13-12-2025", "13-01-2026")
-df_delivery = nse.equity.delivery_history("RELIANCE", "13-12-2025", "13-01-2026", type="deliverable", series="ALL")
-df_delivery = nse.equity.delivery_history("RELIANCE", "13-12-2025", "13-01-2026", type="priceVolume", series="EQ")
 
-# Example: Filter for high institutional accumulation (> 60% delivery)
-high_delivery = df_delivery[df_delivery['COP_DELIV_PERC'] > 60]
-print(high_delivery[['mTIMESTAMP', 'CH_CLOSING_PRICE', 'COP_DELIV_PERC']])
+# 2. Advanced: Specific Data Types or Series
+# Options for type: "priceVolumeDeliverable", "priceVolume", "deliverable"
+df_only_deliv = nse.equity.delivery_history("RELIANCE", "13-12-2025", "13-01-2026", type="deliverable", series="ALL")
+
+# 3. Example: Filter for high institutional accumulation (> 60% delivery)
+# This uses the clean mapped column names
+high_delivery = df_delivery[df_delivery['Delivery_Pct'] > 60]
+print(high_delivery[['Date', 'Close', 'Delivery_Pct']])
 
 ```
 
