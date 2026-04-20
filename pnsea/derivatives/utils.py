@@ -12,6 +12,10 @@ required_fields = [
     "bidprice",
     "askQty",
     "askPrice",
+    "buyPrice1",
+    "buyQuantity1",
+    "sellPrice1",
+    "sellQuantity1",
 ]
 
 # Function to extract required fields from a dictionary column
