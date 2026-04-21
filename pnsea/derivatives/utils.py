@@ -8,10 +8,12 @@ required_fields = [
     "impliedVolatility",
     "lastPrice",
     "totalTradedVolume",
-    "bidQty",
-    "bidprice",
-    "askQty",
-    "askPrice",
+    "totalBuyQuantity",
+    "totalSellQuantity",
+    "buyQuantity1",
+    "buyPrice1",
+    "sellQuantity1",
+    "sellPrice1",
 ]
 
 # Function to extract required fields from a dictionary column

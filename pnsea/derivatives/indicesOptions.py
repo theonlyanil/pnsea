@@ -53,6 +53,7 @@ class IndicesOptions:
             raw_rows = [row for row in raw_rows if float(row.get('strikePrice')) == target]
 
         df = pd.DataFrame(raw_rows)
+        print(df)
 
         # 5. Extract and Flatten CE/PE
         # We pass the Series of dicts to your extract_option_data utility
