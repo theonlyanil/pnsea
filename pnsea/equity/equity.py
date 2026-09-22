@@ -14,7 +14,17 @@ class Equity:
     def info(self, symbol):
         url = f"{NSEEndpoints.EQUITY_QUOTE}{symbol}"
         response = self.session.get(url)
-        return response.json()
+        res_json = response.json()
+        if isinstance(res_json, dict) and "equityResponse" in res_json and res_json["equityResponse"]:
+            data = res_json["equityResponse"][0]
+            # Backward compatibility aliases for README
+            if "info" not in data and "metaData" in data:
+                data["info"] = data["metaData"]
+            if "priceInfo" in data and isinstance(data["priceInfo"], dict):
+                if "lastPrice" not in data["priceInfo"]:
+                    data["priceInfo"]["lastPrice"] = data.get("tradeInfo", {}).get("lastPrice") or data.get("metaData", {}).get("closePrice")
+            return data
+        return res_json
     
     """
     Get History for a single stock symbol
@@ -101,7 +111,8 @@ class Equity:
             'VWAP': 'VWAP'
         }
 
-        df = df[list(mapping.keys())].rename(columns=mapping)
+        present_keys = [k for k in mapping.keys() if k in df.columns]
+        df = df[present_keys].rename(columns=mapping)
 
         return df
     
@@ -115,6 +126,9 @@ class Equity:
         res = self.session.get(url = NSEEndpoints.ALL_STOCK_DATA)
         data = res.json()['total']['data']
         return data
+
+    def all_stocks_data(self):
+        return self.all_stock_data()
     
     def all_indices(self):
         """

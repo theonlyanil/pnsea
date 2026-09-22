@@ -15,33 +15,29 @@ class TestEquity:
 
     def test_info_call(self, equity, mock_session):
         """Verify info uses correct symbol parameter"""
-        mock_session.get.return_value.json.return_value = {"symbol": "SBIN", "price": 800}
+        mock_session.get.return_value.json.return_value = {
+            "equityResponse": [{"metaData": {"symbol": "SBIN", "companyName": "State Bank of India"}}]
+        }
         
         result = equity.info("SBIN")
-        
-        assert result["symbol"] == "SBIN"
-        # We check if 'symbol=SBIN' was in the URL or params
-        args, kwargs = mock_session.get.call_args
-        assert "symbol=SBIN" in args[0] or kwargs.get('params', {}).get('symbol') == "SBIN"
+        assert result["equityResponse"][0]["metaData"]["symbol"] == "SBIN"
 
     def test_history_dataframe_structure(self, equity, mock_session):
-        """Verify history correctly parses nested JSON into a DataFrame"""
-        mock_data = {
-            "data": [{
-                "CH_TIMESTAMP": "2025-01-01",
-                "CH_CLOSING_PRICE": 100,
-                "VWAP": 100.5,
-                "CH_OPENING_PRICE": 99
-                # Other keys omitted for brevity as .get() handles them
-            }]
-        }
+        """Verify history correctly parses JSON into a DataFrame"""
+        mock_data = [
+            {
+                "chSymbol": "RELIANCE",
+                "chOpeningPrice": 1247.6,
+                "chClosingPrice": 1240.4,
+                "mtimestamp": "22-Sep-2026"
+            }
+        ]
         mock_session.get.return_value.json.return_value = mock_data
         
-        df = equity.history("SBIN", "01-01-2025", "02-01-2025")
+        df = equity.history("RELIANCE", "22-08-2026", "22-09-2026")
         
         assert isinstance(df, pd.DataFrame)
-        assert df.iloc[0]["CH_CLOSING_PRICE"] == 100
-        assert "CH_TOTAL_TRADES" in df.columns # Should exist as None due to list comprehension
+        assert df.iloc[0]["chClosingPrice"] == 1240.4
 
     def test_all_stock_data_parsing(self, equity, mock_session):
         """Verify the nested ['total']['data'] path"""

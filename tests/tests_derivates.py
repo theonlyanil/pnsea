@@ -16,11 +16,13 @@ class TestIndicesOptions:
     def test_get_indices(self, indices, mock_session):
         """Verify extraction of index symbol list"""
         mock_session.get.return_value.json.return_value = {
-            'allSymbol': ['NIFTY', 'BANKNIFTY', 'FINNIFTY']
+            'data': {
+                'IndexList': [{'symbol': 'NIFTY'}, {'symbol': 'BANKNIFTY'}, {'symbol': 'FINNIFTY'}]
+            }
         }
         result = indices.get_indices()
-        assert 'NIFTY' in result
         assert len(result) == 3
+        assert result[0]['symbol'] == 'NIFTY'
 
     def test_expiry_dates(self, indices, mock_session):
         """Verify extraction of expiry dates list"""
