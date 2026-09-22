@@ -31,14 +31,16 @@ class NSE:
     """
     AutoCompletes the query and returns in JSON format
     """
-    def autocomplete(self, query: str):
-        url = f"{NSEEndpoints.AUTOCOMPLETE}{query}"
+    def autocomplete(self, query: str, category: str = "all"):
+        url = f"{NSEEndpoints.AUTOCOMPLETE}{category}?symbol={query}"
         return self.session.get(url).json()
 
-    """TODO: REMOVE IN PRODUCTION -- Endpoint Tester"""
-    def endpoint_tester(self, endpoint_url):
-        res = self.session.get(endpoint_url)
-        return res
+    def endpoint_tester(self, endpoint_url: str, params: dict = None, headers: dict = None):
+        """
+        Utility method to test arbitrary NSE API endpoint URLs directly
+        using the active NSESession (with cookies and headers managed automatically).
+        """
+        return self.session.get(endpoint_url, params=params, headers=headers)
 
 if __name__ == "__main__":
     nse = NSE()

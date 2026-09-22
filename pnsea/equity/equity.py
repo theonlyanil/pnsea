@@ -12,38 +12,41 @@ class Equity:
     Get Info for a single company
     """
     def info(self, symbol):
-        url = f"{NSEEndpoints.EQUITY_QUOTE}?symbol={symbol}"
+        url = f"{NSEEndpoints.EQUITY_QUOTE}{symbol}"
         response = self.session.get(url)
-        #df = pd.DataFrame(response.json())
-        #return df
         return response.json()
     
     """
-    Get History for a single company
+    Get History for a single stock symbol
     Inputs:
-    symbol: str: Symbol of the company
+    symbol: str: Symbol of the company (e.g. 'RELIANCE', 'SBIN')
+    from_date: str: Start Date in dd-mm-yyyy format
+    to_date: str: End Date in dd-mm-yyyy format
+    series: str: Series type (default: 'EQ')
+    """
+    def history(self, symbol, from_date, to_date, series="EQ"):
+        url = f"{NSEEndpoints.EQUITY_HISTORY}&symbol={symbol}&series={series}&fromDate={from_date}&toDate={to_date}"
+        response = self.session.get(url)
+        data = response.json()
+        return pd.DataFrame(data if isinstance(data, list) else [])
+
+    """
+    Get History for an index (e.g. 'NIFTY 50', 'NIFTY BANK')
+    Inputs:
+    index_name: str: Name of the index
     from_date: str: Start Date in dd-mm-yyyy format
     to_date: str: End Date in dd-mm-yyyy format
     """
-    def history(self, symbol, from_date, to_date):
-        url = f"{NSEEndpoints.EQUITY_HISTORY}?symbol={symbol}"
-        params = dict()
-        params['from'] = from_date
-        params['to'] = to_date
-
-        data = self.session.get(url, params=params).json()
-
-        # Extract relevant columns
-        columns = [
-            "CH_TIMESTAMP", "CH_TRADE_HIGH_PRICE", "CH_TRADE_LOW_PRICE", "CH_OPENING_PRICE",
-            "CH_CLOSING_PRICE", "CH_LAST_TRADED_PRICE", "CH_PREVIOUS_CLS_PRICE",
-            "CH_TOT_TRADED_QTY", "CH_TOT_TRADED_VAL", "CH_52WEEK_HIGH_PRICE",
-            "CH_52WEEK_LOW_PRICE", "CH_TOTAL_TRADES", "VWAP"
-        ]
-
-        # Create DataFrame
-        df = pd.DataFrame([{col: entry.get(col, None) for col in columns} for entry in data["data"]])
-        return df
+    def index_history(self, index_name, from_date, to_date):
+        url = NSEEndpoints.INDEX_HISTORY
+        params = {
+            "indexType": index_name,
+            "from": from_date,
+            "to": to_date
+        }
+        response = self.session.get(url, params=params)
+        data = response.json()
+        return pd.DataFrame(data.get("data", []))
     
     def delivery_history(self, symbol, from_date, to_date, type="priceVolumeDeliverable", series="EQ"):
         """

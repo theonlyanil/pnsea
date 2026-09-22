@@ -10,9 +10,7 @@ custom_headers = {
     "sec-fetch-dest": "empty",
     "sec-fetch-mode": "cors",
     "sec-fetch-site": "same-origin",
-    "method": "GET",
-    "scheme": "https",
-    }
+}
 
 class NSESession(StealthSession):
     def __init__(self, *args, **kwargs):
@@ -24,8 +22,9 @@ class NSESession(StealthSession):
         return self.session.headers
     
     def get_session_details(self):
+        cookies_dict = self.cookies if isinstance(self.cookies, dict) else (self.cookies.get_dict() if hasattr(self.cookies, 'get_dict') else {})
         return {
             "headers": self.headers,
-            "cookies": self.cookies.get_dict(),
+            "cookies": cookies_dict,
             "proxy": self.proxies
         }

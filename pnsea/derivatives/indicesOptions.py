@@ -9,9 +9,9 @@ class IndicesOptions:
         self.session = session
 
     def get_indices(self):
-        url = f"{NSEEndpoints.INDICES_OPTIONS_LIST}?symbol=NIFTY"
-        data = self.session.get(url).json()['allSymbol']
-        return data
+        url = NSEEndpoints.INDICES_OPTIONS_LIST
+        response = self.session.get(url).json()
+        return response.get('data', {}).get('IndexList', [])
     
     def expiry_dates(self, symbol):
         url = f"{NSEEndpoints.INDICES_EXPIRY_DATES}?symbol={symbol}"
