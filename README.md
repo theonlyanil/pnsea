@@ -148,3 +148,12 @@ print(nse.mf.mf_insider_data(symbol="PPFAS Mutual Fund"))
 2.  **Analysis Ready:** Complex nested JSON is automatically flattened into Pandas DataFrames.
 
 3.  **v3 API Support:** Uses the most modern NSE endpoints for speed and reliability.
+
+* * * * *
+
+🏗 Need Indian market data pipelines built for you?
+---------------------------------------------------
+
+PNSEA is maintained by [Unreal Brains](https://unrealbrains.com). We build custom NSE/BSE data pipelines and live dashboards (option chains, insider/promoter activity, corporate disclosures) on low-cost infrastructure, with no commercial feed licence fees.
+
+**[Indian market data pipelines & dashboards →](https://unrealbrains.com/services/custom-market-data-pipelines?utm_source=github&utm_medium=readme&utm_campaign=pnsea)**
